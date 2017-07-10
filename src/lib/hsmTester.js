@@ -83,7 +83,7 @@ class HsmTester {
     showResults() {
         let higher = 0;
         const testPackageByName = {};
-        const testNames = Object.keys(this.results);
+        const testNames = Object.keys(this.results).sort();
         testNames.forEach((name) => {
             this.results[name].forEach((iteration, index) => {
                 if (index === 0) {
@@ -168,8 +168,9 @@ class HsmTester {
 
             testNames.forEach((testName) => {
                 const info = labels[testName];
+                const limit = startBarsAt + info.time.width;
                 let newLabel = info.label;
-                for (let i = newLabel.length; i < info.time.width; i++) {
+                for (let i = newLabel.length; i < limit; i++) {
                     newLabel += i < startBarsAt ? ' ' : '█';
                 }
 

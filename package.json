@@ -49,7 +49,7 @@
     "scripts": {
         "install-hooks": "./utils/hooks/install",
         "start": "node ./src/start.js",
-        "mock": "yarn start -- --mock=./mock.json",
+        "mock": "npm start -- --mock=./mock.json",
         "test": "./utils/scripts/test",
         "lint": "./utils/scripts/lint"
     }
