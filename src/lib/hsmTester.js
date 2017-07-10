@@ -38,13 +38,13 @@ class HsmTester {
          */
         this.url = testsURL;
         /**
-         * The relative path from this class to the directory where all the tests are located.
+         * The absolute path where all the tests are located.
          * @type {String}
          */
-        this.path = testsPath;
+        this.path = path.join(process.cwd(), testsPath);
         /**
-         * A dictionary where the keys are the test names and the values are the path to their
-         * files.
+         * A dictionary where the keys are the test names and the values are the absolute path to
+         * their files.
          * @type {Object}
          */
         this.tests = this._findAllTheTests();
@@ -461,15 +461,15 @@ class HsmTester {
     }
     /**
      * Find all the test files on the directory sent to the constructor.
-     * @return {Object} A dictionary with a extension-less filenames as keys and the paths as
-     *                  values.
+     * @return {Object} A dictionary with a extension-less filenames as keys and the absolute paths
+     *                  as values.
      */
     _findAllTheTests() {
         const tests = {};
         fs.readdirSync(this.path).forEach((filename) => {
             const file = filename.toLowerCase();
             if (file.endsWith('.js')) {
-                tests[file.replace(/.js$/, '')] = path.join(this.path, file);
+                tests[file.replace(/.js$/, '')] = path.join(this.path, filename);
             }
         });
 
@@ -484,9 +484,10 @@ class HsmTester {
      * @throws {Error} If The file can't be found or its contents are not valid JSON.
      */
     _setupMocks(filepath) {
+        const mockpath = path.join(process.cwd(), filepath);
         let result = false;
         try {
-            this.results = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+            this.results = JSON.parse(fs.readFileSync(mockpath, 'utf-8'));
             result = true;
         } catch (error) {
             throw error;
