@@ -42,7 +42,9 @@
         "jasmine-expect": "3.7.0",
 
         "esdoc": "0.4.8",
-        "esdoc-es7-plugin": "0.0.3"
+        "esdoc-es7-plugin": "0.0.3",
+
+        "coveralls": "2.13.1"
     },
     "engine-strict": true,
     "engines": {

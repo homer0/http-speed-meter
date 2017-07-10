@@ -48,6 +48,8 @@ class HsmTester {
          * @type {Object}
          */
         this.tests = this._findAllTheTests();
+        // eslint-disable-next-line
+        console.info('FOR TRAVIS', this.tests);
         /**
          * The number of iterations the tests will make.
          * @type {Number}
