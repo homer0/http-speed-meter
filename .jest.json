@@ -1,5 +1,6 @@
 {
     "collectCoverage": true,
     "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
-    "unmockedModulePathPatterns": ["mocks/"]
+    "unmockedModulePathPatterns": ["mocks/"],
+    "coveragePathIgnorePatterns": ["/node_modules/", "mocks"]
 }
