@@ -4,7 +4,9 @@ jest.mock('fs');
 require('jasmine-expect');
 const fs = require('fs');
 const shell = require('/tests/mocks/shell.mock');
+const spinner = require('/tests/mocks/spinner.mock');
 jest.setMock('shelljs', shell);
+jest.setMock('cli-spinner', spinner);
 
 const HsmTester = require('/src/lib/hsmTester');
 
@@ -15,6 +17,7 @@ describe('HsmTester', () => {
         fs.readdirSync.mockReset();
         fs.readFileSync.mockReset();
         shell.reset();
+        spinner.reset();
         console.log = originalLog;
     });
 
@@ -107,6 +110,15 @@ describe('HsmTester', () => {
             message: 'success!',
         };
 
+        const spinnerContext = {
+            clearLine: jest.fn(),
+            stream: {
+                write: jest.fn(),
+            },
+        };
+
+        const spinnerText = 'loading!';
+
         fs.readdirSync = jest.fn(() => [testFile]);
         shell.addExecCallback(0, JSON.stringify(testResponse));
 
@@ -118,6 +130,13 @@ describe('HsmTester', () => {
             const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
             expect(shell.commands[0]).toMatch(commandRegex);
             expect(sub.results[testName]).toEqual([testResponse]);
+            expect(spinner.new.mock.calls.length).toBe(1);
+            expect(spinner.new.mock.calls[0][0].onTick).toBeFunction();
+            spinner.new.mock.calls[0][0].onTick.apply(spinnerContext, [spinnerText]);
+            expect(spinnerContext.clearLine.mock.calls.length).toBe(1);
+            expect(spinnerContext.stream.write.mock.calls.length).toBe(1);
+            expect(spinner.start.mock.calls.length).toBe(1);
+            expect(spinner.stop.mock.calls.length).toBe(1);
         });
     });
 
@@ -237,6 +256,24 @@ describe('HsmTester', () => {
         })
         .catch((error) => {
             expect(error).toEqual(errorReponse);
+        });
+    });
+
+    it('should be reject the \'run\' promise if a test doesn\'t return a JSON', () => {
+        const targetURL = 'http://homer0.com';
+        const testsPath = 'test-folder/more-tests';
+        const testFile = 'charito.js';
+
+        fs.readdirSync = jest.fn(() => [testFile]);
+        shell.addExecCallback(0, 'charito :D!');
+
+        const sub = new HsmTester(targetURL, testsPath);
+        return sub.run('charito')
+        .then(() => {
+            expect(1).toBe(2);
+        })
+        .catch((error) => {
+            expect(error.message).toMatch(/Unexpected token/i);
         });
     });
 

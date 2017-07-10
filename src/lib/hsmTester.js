@@ -3,6 +3,7 @@ const fs = require('fs');
 const shell = require('shelljs');
 const prettyMs = require('pretty-ms');
 const chalk = require('chalk');
+const Spinner = require('cli-spinner').Spinner;
 const dependencies = require('../../package.json').dependencies;
 
 class HsmTester {
@@ -49,6 +50,16 @@ class HsmTester {
             );
         }
 
+        const spinner = new Spinner({
+            text: 'Making the requests %s',
+            onTick: function onSpinnerTick(msg) {
+                this.clearLine(this.stream);
+                this.stream.write(chalk.dim(msg));
+            },
+        });
+
+        spinner.start();
+
         return Promise.all(list.map((test) => {
             const iterationsPromises = [];
             for (let i = 0; i < this.iterations; i++) {
@@ -57,7 +68,14 @@ class HsmTester {
 
             return Promise.all(iterationsPromises);
         }))
-        .then(() => this);
+        .catch((error) => {
+            spinner.stop(true);
+            return Promise.reject(error);
+        })
+        .then(() => {
+            spinner.stop(true);
+            return this;
+        });
     }
 
     _runTest(name) {
@@ -70,8 +88,16 @@ class HsmTester {
                 },
                 (code, stdout, stderr) => {
                     if (code === 0) {
-                        this._addResultOutput(name, stdout);
-                        resolve();
+                        let success = true;
+                        try {
+                            this._addResultOutput(name, stdout);
+                        } catch (error) {
+                            reject(error);
+                            success = false;
+                        }
+                        if (success) {
+                            resolve();
+                        }
                     } else {
                         reject(stderr.trim());
                     }

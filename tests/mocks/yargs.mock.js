@@ -11,9 +11,9 @@ class YargsMock {
     }
 
     reset() {
-        // Object.keys(this.argv).forEach((key) => {
-        //     delete this.argv[key];
-        // });
+        Object.keys(this.argv).forEach((key) => {
+            delete this.argv[key];
+        });
     }
 }
 
