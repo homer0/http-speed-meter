@@ -74,6 +74,14 @@ You may have noticed on the output title that it says _"Average"_ and _"Iteratio
 npm start -- --iterations=20
 ```
 
+### Specific test
+
+By default it runs all the tests it founds, but if you want to try just one, use the `--test` argument:
+
+```
+npm start -- --test=axios
+```
+
 ## Development
 
 First of all, install all the dependencies (if you haven't done it yet) and run `npm run install-hooks`, then:
