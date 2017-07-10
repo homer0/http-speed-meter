@@ -34,7 +34,11 @@
         "eslint-plugin-jsx-a11y": "2.2.2",
         "eslint-plugin-import": "1.16.0",
         "eslint-plugin-react": "6.3.0",
-        "eslint-plugin-import": "1.16.0"
+        "eslint-plugin-import": "1.16.0",
+
+        "jest-cli": "20.0.4",
+        "jest-ex": "2.0.1",
+        "jasmine-expect": "3.7.0"
     },
     "engine-strict": true,
     "engines": {
@@ -43,7 +47,10 @@
     },
     "main": "src/index.js",
     "scripts": {
+        "install-hooks": "./utils/hooks/install",
         "start": "node ./src/start.js",
-        "mock": "yarn start -- --mock=./mock.json"
+        "mock": "yarn start -- --mock=./mock.json",
+        "test": "./utils/scripts/test",
+        "lint": "./utils/scripts/lint"
     }
 }

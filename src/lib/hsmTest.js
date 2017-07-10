@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const argv = require('yargs').argv;
-
 class HsmTest {
 
     constructor() {
@@ -25,7 +24,6 @@ class HsmTest {
         })))
         .catch((error) => {
             console.error(`ERROR: ${error.message}`);
-            process.exit(1);
         });
     }
 
@@ -39,6 +37,10 @@ class HsmTest {
 
     get userAgent() {
         return `HsmTest: ${this.name}`;
+    }
+
+    get name() {
+        return 'unknown test';
     }
 
     _runTest(method = '') {
@@ -63,7 +65,7 @@ class HsmTest {
     }
 
     _error(error) {
-        const text = typeof error === 'object' ? (error.message || 'Unknown error') : error;
+        const text = typeof error === 'object' ? error.message : error;
         return new Error(`[HsmTest] ${this.name}: ${text}`);
     }
 

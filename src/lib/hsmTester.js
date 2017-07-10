@@ -7,11 +7,11 @@ const dependencies = require('../../package.json').dependencies;
 
 class HsmTester {
 
-    constructor(options) {
-        this.path = path.join(process.cwd(), options.path);
+    constructor(testsURL, testsPath, options = {}) {
+        this.url = testsURL;
+        this.path = path.join(process.cwd(), testsPath);
         this.tests = this._findAllTheTests();
 
-        this.url = options.url;
         this.iterations = options.iterations || 1;
         this.results = {};
         this.mock = options.mock ? this._setupMocks(options.mock) : null;
@@ -43,7 +43,7 @@ class HsmTester {
         if (!name) {
             list = Object.keys(this.tests);
         } else {
-            const isRegex = typeof test === 'object';
+            const isRegex = typeof name === 'object';
             list = Object.keys(this.tests).filter(
                 test => ((isRegex && name.test(test)) || (!isRegex && name === test))
             );
@@ -62,24 +62,21 @@ class HsmTester {
 
     _runTest(name) {
         return new Promise((resolve, reject) => {
-            if (this.tests[name]) {
-                shell.exec(
-                    `node ${this.tests[name]} --url=${this.url}`,
-                    {
-                        silent: true,
-                        async: true,
-                    },
-                    (code, stdout, stderr) => {
-                        if (code === 0) {
-                            this._addResultOutput(name, stdout);
-                            resolve();
-                        } else {
-                            reject(stderr.trim());
-                        }
-                    });
-            } else {
-                reject(new Error(`The requested test doesn't exists: ${name}`));
-            }
+            shell.exec(
+                `node ${this.tests[name]} --url=${this.url}`,
+                {
+                    silent: true,
+                    async: true,
+                },
+                (code, stdout, stderr) => {
+                    if (code === 0) {
+                        this._addResultOutput(name, stdout);
+                        resolve();
+                    } else {
+                        reject(stderr.trim());
+                    }
+                }
+            );
         });
     }
 
@@ -215,10 +212,10 @@ class HsmTester {
             throw new Error(`There's no info about '${depName}' on the package.json`);
         }
 
-        const { name, version, repository } = require(path.join(
+        const { name, version, repository } = JSON.parse(fs.readFileSync(path.join(
             process.cwd(),
             `node_modules/${depName}/package.json`
-        ));
+        )));
 
         let repositoryURL = typeof repository === 'string' ? repository : repository.url;
         if (!repositoryURL.includes('://')) {
