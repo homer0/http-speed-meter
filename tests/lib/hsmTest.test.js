@@ -32,7 +32,7 @@ describe('HsmTest', () => {
         return new HsmTest().run()
         .then(() => {
             expect(errorLogMock.mock.calls.length).toBe(1);
-            expect(errorLogMock.mock.calls[0][0]).toMatch(/test: method not extended/i);
+            expect(errorLogMock.mock.calls[0][0]).toMatch(/test method not extended/i);
         });
     });
 
@@ -56,7 +56,7 @@ describe('HsmTest', () => {
         return new SubHsmTest().run()
         .then(() => {
             expect(errorLogMock.mock.calls.length).toBe(1);
-            expect(errorLogMock.mock.calls[0][0]).toMatch(/testJSON: method not extended/i);
+            expect(errorLogMock.mock.calls[0][0]).toMatch(/testJSON method not extended/i);
         });
     });
 

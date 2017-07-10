@@ -39,7 +39,10 @@
 
         "jest-cli": "20.0.4",
         "jest-ex": "2.0.1",
-        "jasmine-expect": "3.7.0"
+        "jasmine-expect": "3.7.0",
+
+        "esdoc": "0.4.8",
+        "esdoc-es7-plugin": "0.0.3"
     },
     "engine-strict": true,
     "engines": {
@@ -52,6 +55,7 @@
         "start": "node ./src/start.js",
         "mock": "npm start -- --mock=./mock.json",
         "test": "./utils/scripts/test",
-        "lint": "./utils/scripts/lint"
+        "lint": "./utils/scripts/lint",
+        "docs": "./utils/scripts/docs"
     }
 }
