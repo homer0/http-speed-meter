@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const { Spinner } = require('cli-spinner');
 const { dependencies } = require('../../package.json');
 
-const DEFAULT_MAX_COLUMN = 100;
+const DEFAULT_MAX_COLUMN = 80;
 /**
  * The main class of the project. This _"tester class"_ is in charge of finding all the
  * test files,
