@@ -1,27 +1,25 @@
 class SpinnerMockManager {
-    constructor() {
-        this.new = jest.fn();
-        this.start = jest.fn();
-        this.stop = jest.fn();
-    }
+  constructor() {
+    this.new = jest.fn();
+    this.start = jest.fn();
+    this.stop = jest.fn();
+  }
 
-    reset() {
-        this.new.mockClear();
-        this.start.mockClear();
-        this.stop.mockClear();
-    }
+  reset() {
+    this.new.mockClear();
+    this.start.mockClear();
+    this.stop.mockClear();
+  }
 }
 
 const manager = new SpinnerMockManager();
 
 class SpinnerMock {
-
-    constructor(options) {
-        manager.new(options);
-        this.start = manager.start;
-        this.stop = manager.stop;
-    }
-
+  constructor(options) {
+    manager.new(options);
+    this.start = manager.start;
+    this.stop = manager.stop;
+  }
 }
 
 manager.Spinner = SpinnerMock;

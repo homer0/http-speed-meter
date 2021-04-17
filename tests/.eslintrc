@@ -4,5 +4,8 @@
   "extends": ["plugin:@homer0/jest-with-prettier"],
   "env": {
     "node": true
+  },
+  "rules": {
+    "max-classes-per-file": "off"
   }
 }
