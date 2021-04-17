@@ -1,14 +1,15 @@
 /* eslint-disable no-console */
 jest.mock('fs');
+jest.unmock('../../src/lib/hsmTester');
 
 const fs = require('fs');
-const shell = require('/tests/mocks/shell.mock');
-const spinner = require('/tests/mocks/spinner.mock');
+const shell = require('../mocks/shell.mock');
+const spinner = require('../mocks/spinner.mock');
 
 jest.setMock('shelljs', shell);
 jest.setMock('cli-spinner', spinner);
 
-const HsmTester = require('/src/lib/hsmTester');
+const HsmTester = require('../../src/lib/hsmTester');
 
 const originalLog = console.log;
 
@@ -26,7 +27,7 @@ describe('HsmTester', () => {
     const sub = new HsmTester('http://homer0.com', './');
     expect(sub.iterations).toBe(1);
     expect(sub.mock).toBeNull();
-    expect(sub.maxColumns).toBe(100);
+    expect(sub.maxColumns).toBe(80);
     expect(sub.normalizedNames).toEqual({
       json: 'JSON',
       raw: 'Text',
@@ -79,7 +80,7 @@ describe('HsmTester', () => {
       mock: 'yes-please',
     });
 
-    expect(sub.mock).toBeTrue();
+    expect(sub.mock).toBe(true);
     expect(sub.results).toEqual(customMock);
   });
 
@@ -98,7 +99,7 @@ describe('HsmTester', () => {
   it('should be able to find all the tests on a directory', () => {
     fs.readdirSync = jest.fn(() => ['myTest.js', '.DS_Store']);
     const sub = new HsmTester('http://homer0.com', './tests-folder');
-    expect(sub.tests.mytest).toBeString();
+    expect(typeof sub.tests.mytest).toBe('string');
     expect(sub.tests.mytest).toMatch(/tests\-folder\/myTest\.js$/i);
   });
 
@@ -131,7 +132,7 @@ describe('HsmTester', () => {
       expect(shell.commands[0]).toMatch(commandRegex);
       expect(sub.results[testName]).toEqual([testResponse]);
       expect(spinner.new.mock.calls.length).toBe(1);
-      expect(spinner.new.mock.calls[0][0].onTick).toBeFunction();
+      expect(typeof spinner.new.mock.calls[0][0].onTick).toBe('function');
       spinner.new.mock.calls[0][0].onTick.apply(spinnerContext, [spinnerText]);
       expect(spinnerContext.clearLine.mock.calls.length).toBe(1);
       expect(spinnerContext.stream.write.mock.calls.length).toBe(1);

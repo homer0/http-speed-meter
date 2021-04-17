@@ -2,8 +2,9 @@
 const args = require('../mocks/yargs.mock');
 
 jest.setMock('yargs', args);
+jest.unmock('../../src/lib/hsmTest');
 
-const HsmTest = require('/src/lib/hsmTest');
+const HsmTest = require('../../src/lib/hsmTest');
 
 const originalErrorLog = console.error;
 const originalLog = console.log;
