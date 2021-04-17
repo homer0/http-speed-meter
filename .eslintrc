@@ -1,40 +1,8 @@
 {
-    "extends": ["airbnb"],
-    "rules": {
-        "comma-dangle": ["error", "always-multiline"],
-        "indent": ["error", 4],
-        "no-extra-bind": 0,
-        "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-        "no-param-reassign": 0,
-        "no-new": 0,
-        "import/newline-after-import": 0,
-        "import/no-dynamic-require": 0,
-        "import/no-extraneous-dependencies": 0,
-        "import/no-unresolved": 0,
-        "import/no-absolute-path": 0,
-        "strict": 0,
-        "no-plusplus": 0,
-        "class-methods-use-this": 0
-    },
-    "globals": {
-        "window": true,
-        "Promise": true,
-        "process": true,
-        "console": true,
-        "jest": true,
-        "it": true,
-        "describe": true,
-        "expect": true,
-        "pit": true,
-        "spyOn": true,
-        "afterEach": true,
-        "beforeEach": true,
-        "browser": true,
-        "angular": true,
-        "by": true,
-        "isAngularSite": true,
-        "protractor": true,
-        "element": true,
-        "jasmine": true
-    }
+  "root": true,
+  "plugins": ["@homer0"],
+  "extends": [
+    "plugin:@homer0/node-with-prettier",
+    "plugin:@homer0/jsdoc"
+  ]
 }
