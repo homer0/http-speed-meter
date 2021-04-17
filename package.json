@@ -49,8 +49,12 @@
     "node": ">=12.0.0"
   },
   "main": "src/index.js",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "scripts": {
-    "install-hooks": "./utils/hooks/install",
     "start": "./utils/scripts/start",
     "mock": "yon start -- --mock=./mock.json",
     "test": "./utils/scripts/test",
