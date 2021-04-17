@@ -16,7 +16,7 @@ class GotTest extends HsmTest {
   testJSON(start, finish, reject) {
     start();
     got(this.url, {
-      json: true,
+      responseType: 'json',
       headers: {
         'User-Agent': this.userAgent,
       },
