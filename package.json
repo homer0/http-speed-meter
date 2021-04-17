@@ -51,8 +51,8 @@
   "main": "src/index.js",
   "scripts": {
     "install-hooks": "./utils/hooks/install",
-    "start": "node ./src/start.js",
-    "mock": "npm start -- --mock=./mock.json",
+    "start": "./utils/scripts/start",
+    "mock": "yon start -- --mock=./mock.json",
     "test": "./utils/scripts/test",
     "lint": "./utils/scripts/lint",
     "docs": "./utils/scripts/docs"
