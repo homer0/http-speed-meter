@@ -1,7 +1,7 @@
 const { argv } = require('yargs');
 const { HsmTester } = require('.');
 
-const defaultURL = 'https://api.github.com/users/homer0/repos';
+const defaultURL = 'https://pokeapi.co/api/v2/pokemon/lugia';
 const targetURL = argv.url || defaultURL;
 
 new HsmTester(targetURL, './src/tests', {
