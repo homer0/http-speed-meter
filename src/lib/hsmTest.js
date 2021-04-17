@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
 const { argv } = require('yargs');
+
+// eslint-disable-next-line no-process-env
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 /**
  * This is the class all the tests extend. It takes care of receiving the URL from the CLI
  * arguments, messuring the time of the tests, encoding the results and even handling any
