@@ -1,9 +1,9 @@
-const got = require('got');
-const { HsmTest } = require('..');
+const { HsmTest, getLib } = require('..');
 
 class GotTest extends HsmTest {
   test(start, finish, reject) {
     start();
+    const got = getLib('got').default;
     got(this.url, {
       headers: {
         'User-Agent': this.userAgent,
@@ -15,6 +15,7 @@ class GotTest extends HsmTest {
 
   testJSON(start, finish, reject) {
     start();
+    const got = getLib('got').default;
     got(this.url, {
       responseType: 'json',
       headers: {

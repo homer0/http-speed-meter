@@ -1,9 +1,9 @@
-const fetch = require('node-fetch');
-const { HsmTest } = require('..');
+const { HsmTest, getLib } = require('..');
 
 class NodeFetchTest extends HsmTest {
   test(start, finish, reject) {
     start();
+    const fetch = getLib('node-fetch').default;
     fetch(this.url, {
       headers: {
         'User-Agent': this.userAgent,
@@ -16,6 +16,7 @@ class NodeFetchTest extends HsmTest {
 
   testJSON(start, finish, reject) {
     start();
+    const fetch = getLib('node-fetch').default;
     fetch(this.url, {
       headers: {
         'User-Agent': this.userAgent,

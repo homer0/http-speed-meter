@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const { argv } = require('yargs');
+const { loadESMLibs } = require('./esm');
 
 // eslint-disable-next-line no-process-env
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -47,14 +48,17 @@ class HsmTest {
    *                    to log the error message.
    */
   run() {
-    return Promise.all([this._runTest(this.test), this._runTest(this.testJSON)])
-      .then(([raw, json]) =>
-        console.log(
-          JSON.stringify({
-            test: this.name,
-            raw,
-            json,
-          }),
+    return loadESMLibs()
+      .then(() =>
+        Promise.all([this._runTest(this.test), this._runTest(this.testJSON)]).then(
+          ([raw, json]) =>
+            console.log(
+              JSON.stringify({
+                test: this.name,
+                raw,
+                json,
+              }),
+            ),
         ),
       )
       .catch((error) => {
