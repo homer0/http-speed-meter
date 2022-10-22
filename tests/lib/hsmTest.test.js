@@ -5,15 +5,18 @@ jest.setMock('yargs', args);
 jest.unmock('../../src/lib/hsmTest');
 
 const HsmTest = require('../../src/lib/hsmTest');
+const { loadESMLibs } = require('../../src/lib/esm');
 
 const originalErrorLog = console.error;
 const originalLog = console.log;
+loadESMLibs.mockResolvedValue({});
 
 describe('HsmTest', () => {
   beforeEach(() => {
     args.reset();
     console.error = originalErrorLog;
     console.log = originalLog;
+    loadESMLibs.mockClear();
   });
 
   it('should thrown an error if no URL was send as an argument', () => {
@@ -26,7 +29,7 @@ describe('HsmTest', () => {
     });
 
     const errorLogMock = jest.fn();
-    spyOn(console, 'error').and.callFake(errorLogMock);
+    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     return new HsmTest().run().then(() => {
       expect(errorLogMock.mock.calls.length).toBe(1);
@@ -40,7 +43,7 @@ describe('HsmTest', () => {
     });
 
     const errorLogMock = jest.fn();
-    spyOn(console, 'error').and.callFake(errorLogMock);
+    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -60,7 +63,7 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
     const logMock = jest.fn();
-    spyOn(console, 'log').and.callFake(logMock);
+    jest.spyOn(console, 'log').mockImplementation(logMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -106,7 +109,7 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
     const logMock = jest.fn();
-    spyOn(console, 'log').and.callFake(logMock);
+    jest.spyOn(console, 'log').mockImplementation(logMock);
 
     let initialTestTime = 0;
     let finalTestTime = 0;
@@ -148,7 +151,7 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
     const errorLogMock = jest.fn();
-    spyOn(console, 'error').and.callFake(errorLogMock);
+    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -175,7 +178,7 @@ describe('HsmTest', () => {
     });
     const errorMessage = 'Something went wrong';
     const errorLogMock = jest.fn();
-    spyOn(console, 'error').and.callFake(errorLogMock);
+    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish, reject) {

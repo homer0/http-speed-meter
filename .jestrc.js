@@ -3,6 +3,6 @@ module.exports = {
   collectCoverage: true,
   testPathIgnorePatterns: ['/node_modules/', '/utils/scripts/'],
   unmockedModulePathPatterns: ['/node_modules/', 'mocks/'],
-  coveragePathIgnorePatterns: ['mocks/'],
+  coveragePathIgnorePatterns: ['mocks/', 'esm.js'],
   testEnvironment: 'node',
 };

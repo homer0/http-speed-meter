@@ -1,13 +1,11 @@
-const LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got'];
+module.exports.LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got'];
 const libsModules = {};
 
 module.exports.loadESMLibs = () =>
   Promise.all(
-    LIBS.map((lib) =>
-      import(lib).then((module) => {
-        libsModules[lib] = module;
-      }),
-    ),
+    module.exports.LIBS.map(async (lib) => {
+      libsModules[lib] = await import(lib);
+    }),
   );
 
 module.exports.getLib = (lib) => libsModules[lib];
