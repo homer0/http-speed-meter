@@ -1,10 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 const shell = require('shelljs');
-const prettyMs = require('pretty-ms');
-const chalk = require('chalk');
 const { Spinner } = require('cli-spinner');
 const { dependencies } = require('../../package.json');
+const { getLib } = require('./esm');
 
 const DEFAULT_MAX_COLUMN = 80;
 /**
@@ -278,6 +277,7 @@ class HsmTester {
     const total = 100;
     const percentage = Math.floor((value * total) / highest);
     const width = Math.floor((this.maxColumns / total) * percentage);
+    const prettyMs = getLib('pretty-ms').default;
     return {
       width,
       title: this.normalizedNames[name],
@@ -344,6 +344,7 @@ class HsmTester {
    * @ignore
    */
   _output(results) {
+    const chalk = getLib('chalk').default;
     // Let's sort the tests name.
     const testNames = Object.keys(results).sort();
     // Because `\t` takes too much space :P.
@@ -443,6 +444,7 @@ class HsmTester {
       );
     }
 
+    const chalk = getLib('chalk').default;
     // Turn on the spinner.
     const spinner = new Spinner({
       text: 'Making the requests %s',

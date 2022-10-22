@@ -10,8 +10,32 @@ jest.setMock('shelljs', shell);
 jest.setMock('cli-spinner', spinner);
 
 const HsmTester = require('../../src/lib/hsmTester');
+const { getLib } = require('../../src/lib/esm');
 
 const originalLog = console.log;
+const chalkMock = {
+  underline: {
+    bold: jest.fn((str) => str),
+  },
+  dim: jest.fn((str) => str),
+  red: jest.fn((str) => str),
+  green: jest.fn((str) => str),
+  yellow: jest.fn((str) => str),
+  blue: jest.fn((str) => str),
+  magenta: jest.fn((str) => str),
+  cyan: jest.fn((str) => str),
+  white: jest.fn((str) => str),
+  black: jest.fn((str) => str),
+};
+const prettyMsMock = jest.fn((ms) => `${ms}s`);
+const esmLibs = {
+  chalk: chalkMock,
+  'pretty-ms': prettyMsMock,
+};
+
+getLib.mockImplementation((lib) => ({
+  default: esmLibs[lib],
+}));
 
 describe('HsmTester', () => {
   beforeEach(() => {
@@ -19,6 +43,17 @@ describe('HsmTester', () => {
     fs.readFileSync.mockReset();
     shell.reset();
     spinner.reset();
+    chalkMock.dim.mockClear();
+    chalkMock.red.mockClear();
+    chalkMock.green.mockClear();
+    chalkMock.yellow.mockClear();
+    chalkMock.blue.mockClear();
+    chalkMock.magenta.mockClear();
+    chalkMock.cyan.mockClear();
+    chalkMock.white.mockClear();
+    chalkMock.black.mockClear();
+    chalkMock.underline.bold.mockClear();
+    prettyMsMock.mockClear();
     console.log = originalLog;
   });
 
@@ -103,7 +138,7 @@ describe('HsmTester', () => {
     expect(sub.tests.mytest).toMatch(/tests\-folder\/myTest\.js$/i);
   });
 
-  it('should be able to run one specific test by the test name', () => {
+  it('should be able to run one specific test by the test name', async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
@@ -125,23 +160,22 @@ describe('HsmTester', () => {
     shell.addExecCallback(0, JSON.stringify(testResponse));
 
     const sub = new HsmTester(targetURL, testsPath);
-    return sub.run('charito').then((ref) => {
-      expect(ref).toEqual(sub);
+    const ref = await sub.run('charito');
 
-      const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
-      expect(shell.commands[0]).toMatch(commandRegex);
-      expect(sub.results[testName]).toEqual([testResponse]);
-      expect(spinner.new.mock.calls.length).toBe(1);
-      expect(typeof spinner.new.mock.calls[0][0].onTick).toBe('function');
-      spinner.new.mock.calls[0][0].onTick.apply(spinnerContext, [spinnerText]);
-      expect(spinnerContext.clearLine.mock.calls.length).toBe(1);
-      expect(spinnerContext.stream.write.mock.calls.length).toBe(1);
-      expect(spinner.start.mock.calls.length).toBe(1);
-      expect(spinner.stop.mock.calls.length).toBe(1);
-    });
+    expect(ref).toEqual(sub);
+    const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
+    expect(shell.commands[0]).toMatch(commandRegex);
+    expect(sub.results[testName]).toEqual([testResponse]);
+    expect(spinner.new.mock.calls.length).toBe(1);
+    expect(typeof spinner.new.mock.calls[0][0].onTick).toBe('function');
+    spinner.new.mock.calls[0][0].onTick.apply(spinnerContext, [spinnerText]);
+    expect(spinnerContext.clearLine.mock.calls.length).toBe(1);
+    expect(spinnerContext.stream.write.mock.calls.length).toBe(1);
+    expect(spinner.start.mock.calls.length).toBe(1);
+    expect(spinner.stop.mock.calls.length).toBe(1);
   });
 
-  it('should be able to run one specifc test using a regex', () => {
+  it('should be able to run one specifc test using a regex', async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
@@ -154,16 +188,15 @@ describe('HsmTester', () => {
     shell.addExecCallback(0, JSON.stringify(testResponse));
 
     const sub = new HsmTester(targetURL, testsPath);
-    return sub.run(/chari/).then((ref) => {
-      expect(ref).toEqual(sub);
+    const ref = await sub.run(/chari/);
 
-      const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
-      expect(shell.commands[0]).toMatch(commandRegex);
-      expect(sub.results[testName]).toEqual([testResponse]);
-    });
+    expect(ref).toEqual(sub);
+    const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
+    expect(shell.commands[0]).toMatch(commandRegex);
+    expect(sub.results[testName]).toEqual([testResponse]);
   });
 
-  it('should be able to run all the tests it found', () => {
+  it('should be able to run all the tests it found', async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFiles = ['charito.js', 'maru.js'];
@@ -187,17 +220,17 @@ describe('HsmTester', () => {
     ]);
 
     const sub = new HsmTester(targetURL, testsPath);
-    return sub.run().then((ref) => {
-      expect(ref).toEqual(sub);
-      testFiles.forEach((testFile, index) => {
-        const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
-        expect(shell.commands[index]).toMatch(commandRegex);
-        expect(sub.results[testNames[index]]).toEqual([testResponse]);
-      });
+    const ref = await sub.run();
+
+    expect(ref).toEqual(sub);
+    testFiles.forEach((testFile, index) => {
+      const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
+      expect(shell.commands[index]).toMatch(commandRegex);
+      expect(sub.results[testNames[index]]).toEqual([testResponse]);
     });
   });
 
-  it('should be able to run multiple iterations for a test', () => {
+  it('should be able to run multiple iterations for a test', async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
@@ -226,19 +259,17 @@ describe('HsmTester', () => {
     const sub = new HsmTester(targetURL, testsPath, {
       iterations: 2,
     });
+    const ref = await sub.run();
 
-    return sub.run().then((ref) => {
-      expect(ref).toEqual(sub);
-
-      const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
-      expect(shell.commands.length).toBe(2);
-      expect(shell.commands[0]).toMatch(commandRegex);
-      expect(shell.commands[1]).toMatch(commandRegex);
-      expect(sub.results[testName]).toEqual(testResponses);
-    });
+    expect(ref).toEqual(sub);
+    const commandRegex = RegExp(`${testsPath}/${testFile} --url=${targetURL}$`);
+    expect(shell.commands.length).toBe(2);
+    expect(shell.commands[0]).toMatch(commandRegex);
+    expect(shell.commands[1]).toMatch(commandRegex);
+    expect(sub.results[testName]).toEqual(testResponses);
   });
 
-  it("should be reject the 'run' promise if a test fails", () => {
+  it("should be reject the 'run' promise if a test fails", async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
@@ -248,17 +279,13 @@ describe('HsmTester', () => {
     shell.addExecCallback(10, '', errorReponse);
 
     const sub = new HsmTester(targetURL, testsPath);
-    return sub
-      .run('charito')
-      .then(() => {
-        expect(1).toBe(2);
-      })
-      .catch((error) => {
-        expect(error).toEqual(errorReponse);
-      });
+    expect.assertions(1);
+    return sub.run('charito').catch((error) => {
+      expect(error).toEqual(errorReponse);
+    });
   });
 
-  it("should be reject the 'run' promise if a test doesn't return a JSON", () => {
+  it("should be reject the 'run' promise if a test doesn't return a JSON", async () => {
     const targetURL = 'http://homer0.com';
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
@@ -267,17 +294,13 @@ describe('HsmTester', () => {
     shell.addExecCallback(0, 'charito :D!');
 
     const sub = new HsmTester(targetURL, testsPath);
-    return sub
-      .run('charito')
-      .then(() => {
-        expect(1).toBe(2);
-      })
-      .catch((error) => {
-        expect(error.message).toMatch(/Unexpected token/i);
-      });
+    expect.assertions(1);
+    return sub.run('charito').catch((error) => {
+      expect(error.message).toMatch(/Unexpected token/i);
+    });
   });
 
-  it('should be able to print out the resoluts on the console', () => {
+  it('should be able to print out the resoluts on the console', async () => {
     const targetURL = 'http://homer0.com';
     const customMock = {
       axios: [
@@ -333,41 +356,38 @@ describe('HsmTester', () => {
     });
 
     const logMock = jest.fn();
-    spyOn(console, 'log').and.callFake(logMock);
-
-    return new HsmTester(targetURL, './', {
+    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const sub = new HsmTester(targetURL, './', {
       mock: 'yes-please',
       colors: ['black'],
-    })
-      .run()
-      .then((ref) => ref.showResults())
-      .then(() => {
-        const { mock } = logMock;
-        expect(mock.calls.length).toBe(12);
-        expect(mock.calls[0][0].trim()).toBe('');
-        expect(mock.calls[1][0]).toMatch(/http speed meter/i);
-        expect(mock.calls[2][0]).toMatch(RegExp(targetURL, 'i'));
-        expect(mock.calls[3][0]).toMatch(/iterations: 1/i);
-        expect(mock.calls[4][0]).toMatch(/test: json/i);
-        expect(mock.calls[5][0]).toMatch(
-          RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d(?:(\\.\\d)?)s`),
-        );
-        expect(mock.calls[6][0]).toMatch(
-          RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d(?:(\\.\\d)?)s`),
-        );
-        expect(mock.calls[7][0].trim()).toBe('');
-        expect(mock.calls[8][0]).toMatch(/test: text/i);
-        expect(mock.calls[9][0]).toMatch(
-          RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d(?:(\\.\\d)?)s`),
-        );
-        expect(mock.calls[10][0]).toMatch(
-          RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d(?:(\\.\\d)?)s`),
-        );
-        expect(mock.calls[11][0].trim()).toBe('');
-      });
+    });
+    const ref = await sub.run();
+    ref.showResults();
+    const { mock } = logMock;
+    expect(mock.calls.length).toBe(12);
+    expect(mock.calls[0][0].trim()).toBe('');
+    expect(mock.calls[1][0]).toMatch(/http speed meter/i);
+    expect(mock.calls[2][0]).toMatch(RegExp(targetURL, 'i'));
+    expect(mock.calls[3][0]).toMatch(/iterations: 1/i);
+    expect(mock.calls[4][0]).toMatch(/test: json/i);
+    expect(mock.calls[5][0]).toMatch(
+      RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
+    );
+    expect(mock.calls[6][0]).toMatch(
+      RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
+    );
+    expect(mock.calls[7][0].trim()).toBe('');
+    expect(mock.calls[8][0]).toMatch(/test: text/i);
+    expect(mock.calls[9][0]).toMatch(
+      RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
+    );
+    expect(mock.calls[10][0]).toMatch(
+      RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
+    );
+    expect(mock.calls[11][0].trim()).toBe('');
   });
 
-  it('should fail when trying to print the results for an unkwown dependency', () => {
+  it('should fail when trying to print the results for an unkwown dependency', async () => {
     const unkwnownDependency = 'charito';
     const customMock = {
       [unkwnownDependency]: [
@@ -388,21 +408,20 @@ describe('HsmTester', () => {
     fs.readdirSync = jest.fn(() => ['mockFile.json']);
     fs.readFileSync = jest.fn(() => JSON.stringify(customMock));
 
-    return new HsmTester('batman.com', './', {
+    const sub = new HsmTester('batman.com', './', {
       mock: 'yes-please',
-    })
-      .run()
-      .then((ref) => ref.showResults())
-      .then(() => {
-        expect(1).toBe(2);
-      })
-      .catch((error) => {
-        expect(error.message).toMatch(
-          RegExp(
-            `there's no info about \'${unkwnownDependency}\' on the package.json`,
-            'i',
-          ),
-        );
-      });
+    });
+    const ref = await sub.run();
+    expect.assertions(1);
+    try {
+      ref.showResults();
+    } catch (error) {
+      expect(error.message).toMatch(
+        RegExp(
+          `there's no info about \'${unkwnownDependency}\' on the package.json`,
+          'i',
+        ),
+      );
+    }
   });
 });

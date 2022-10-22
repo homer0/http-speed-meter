@@ -1,0 +1,9 @@
+#!/bin/bash -e
+RESULTS=$(yarn -s start --iterations=20)
+# Remove the first line of the results
+RESULTS=$(echo "$RESULTS" | tail -n +2)
+
+
+TITLE="# Latest results\n\n\`\`\`\n${RESULTS}\n\`\`\`"
+
+echo -e "$TITLE" > RESULTS.md

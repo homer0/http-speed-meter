@@ -1,6 +1,6 @@
 # HTTP Speed Meter
 
-[![Build Status](https://travis-ci.org/homer0/http-speed-meter.svg?branch=master)](https://travis-ci.org/homer0/http-speed-meter) [![Coverage Status](https://coveralls.io/repos/homer0/http-speed-meter/badge.svg?branch=master&service=github)](https://coveralls.io/github/homer0/http-speed-meter?branch=master)  [![Dependencies status](https://david-dm.org/homer0/http-speed-meter.svg)](https://david-dm.org/homer0/http-speed-meter) [![Dev dependencies status](https://david-dm.org/homer0/http-speed-meter/dev-status.svg)](https://david-dm.org/homer0/http-speed-meter#info=devDependencies)
+[![GitHub Workflow Status (main)](https://img.shields.io/github/workflow/status/homer0/http-speed-meter/Test/main?style=flat-square)](https://github.com/homer0/http-speed-meter/actions?query=workflow%3ATest) [![Coverage Status](https://coveralls.io/repos/homer0/http-speed-meter/badge.svg?branch=master&service=github)](https://coveralls.io/github/homer0/http-speed-meter?branch=master)
 
 This is very simple, I wanted to know which was the fastest HTTP client for Javascript. I went to Google and searched for something like _"Compare HTTP clients for Javascript"_ and I found [this page](https://npmcompare.com/compare/axios,got,request,reqwest,superagent). Pretty useful information about the projects, but nothing on performance and/or speed, but I took the list of _competitors_ and bookmarked it to get back later, after I run my tests.
 
