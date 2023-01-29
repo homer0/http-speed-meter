@@ -1,5 +1,5 @@
 #!/bin/bash -e
-RESULTS=$(yarn -s start --iterations=20)
+RESULTS=$(npm --silent start -- --iterations=20)
 # Remove the first line of the results
 RESULTS=$(echo "$RESULTS" | tail -n +2)
 
