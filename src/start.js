@@ -1,7 +1,10 @@
-const { argv } = require('yargs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const { loadESMLibs } = require('./lib/esm');
 const { HsmTester } = require('.');
 
+const cleanArgv = process.argv.filter((arg) => arg !== '--');
+const { argv } = yargs(hideBin(cleanArgv));
 const defaultURL = 'https://pokeapi.co/api/v2/pokemon/lugia';
 const targetURL = argv.url || defaultURL;
 
