@@ -11,7 +11,8 @@ Since is not a dependency, I didn't publish it on NPM, so you'll have to clone o
 Once you are done cloning/downloading, install the project dependencies:
 
 ```
-npm install --production
+pnpm install --production
+# or npm install --production
 ```
 
 > Use the `--production` argument to avoid installing the linting and testing dependencies.
@@ -19,7 +20,8 @@ npm install --production
 Ok, now run it:
 
 ```
-npm start
+pnpm start
+# or npm start
 ```
 
 You should see something like this:
@@ -60,10 +62,10 @@ I added a few options so you can play around
 
 ### Custom URL
 
-By default, I relay on a Github URL, and even if the restriction for non-authenticated requests is 60 per hour, it was good enough for my tests; if you want to run the tests against a another URL, just send it as an argument of `npm start`:
+By default, I relay on a Github URL, and even if the restriction for non-authenticated requests is 60 per hour, it was good enough for my tests; if you want to run the tests against a another URL, just send it as an argument of `pnpm start`:
 
 ```
-npm start -- --url=http://batman-rulz.com
+pnpm start -- --url=http://batman-rulz.com
 ```
 
 ### Iterations
@@ -71,7 +73,7 @@ npm start -- --url=http://batman-rulz.com
 You may have noticed on the output title that it says _"Average"_ and _"Iterations"_, well, that's because you the result is the average time of all the iterations a test made. By default, the number of iterations is `1`, but like with the custom URL, you can send a parameter to overwrite it:
 
 ```
-npm start -- --iterations=20
+pnpm start -- --iterations=20
 ```
 
 ### Specific test
@@ -79,14 +81,14 @@ npm start -- --iterations=20
 By default it runs all the tests it founds, but if you want to try just one, use the `--test` argument:
 
 ```
-npm start -- --test=axios
+pnpm start -- --test=axios
 ```
 
 ## Development
 
-First of all, install all the dependencies (if you haven't done it yet) and run `npm run install-hooks`, then:
+First of all, install all the dependencies (if you haven't done it yet), then:
 
 - **If you want to add a new test:** Create a new file on `/src/tests` and follow the example of the other tests: The `test` and `testJSON` methods, the name getter and `.run()` your file at the end of the file. Don't forget to add the dependency on the `package.json`!.
-- **If you want to modify the output/reporter:** There's an NPM task called `mock`, good to the `package.json` and take a look. It starts the process but with mocked results, so you don't have to make real requests while changing rainbow of output you are writing.
+- **If you want to modify the output/reporter:** There's an script called `mock`, good to the `package.json` and take a look. It starts the process but with mocked results, so you don't have to make real requests while changing rainbow of output you are writing.
 
-Finally, and I didn't mentioned earlier because the hooks are there for a reason, you have the `npm run link` and `npm test` for the linting and the unit tests.
+Finally, and I didn't mentioned earlier because the hooks are there for a reason, you have the `pnpm run lint` and `pnpm test` for the linting and the unit tests.

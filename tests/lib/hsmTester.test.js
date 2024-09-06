@@ -300,7 +300,7 @@ describe('HsmTester', () => {
     });
   });
 
-  it('should be able to print out the resoluts on the console', async () => {
+  it('should be able to print out the results on the console', async () => {
     const targetURL = 'http://homer0.com';
     const customMock = {
       axios: [

@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 const path = require('path');
 const fs = require('fs');
 const shell = require('shelljs');
@@ -353,7 +355,8 @@ class HsmTester {
     const lines = [''];
     // Add some title info...
     lines.push(chalk.underline.bold('HTTP Speed Meter - Average Results\n'));
-    lines.push(chalk.dim(`${tab}Target URL: ${this.url}`));
+    const mockIndicator = `(mocks: ${Boolean(this.mock)})`;
+    lines.push(chalk.dim(`${tab}Target URL: ${this.url} ${mockIndicator}`));
     lines.push(chalk.dim(`${tab}Iterations: ${this.iterations}\n`));
     /**
      * This will store each result row label by its test name. The reason I first store
@@ -432,7 +435,7 @@ class HsmTester {
    *                                      the Promise will be automatically rejected.
    * @ignore
    */
-  _run(name) {
+  async _run(name) {
     // Filter the list.
     let list;
     if (!name) {
@@ -455,27 +458,22 @@ class HsmTester {
     });
     spinner.start();
     // Run all the tests!
-    return Promise.all(
-      list.map((test) => {
-        // Enqueue all the iterations for the current test.
-        const iterationsPromises = [];
-        for (let i = 0; i < this.iterations; i++) {
-          iterationsPromises.push(this._runTest(test));
+    try {
+      for (const test of list) {
+        const iterationList = new Array(this.iterations).fill(test);
+        for (const iterationTest of iterationList) {
+          await this._runTest(iterationTest);
         }
+      }
+    } catch (error) {
+      // Something failed, turn off the spinner before resending the rejection.
+      spinner.stop(true);
+      throw error;
+    }
 
-        return Promise.all(iterationsPromises);
-      }),
-    )
-      .catch((error) => {
-        // Something failed, turn off the spinner before resending the rejection.
-        spinner.stop(true);
-        return Promise.reject(error);
-      })
-      .then(() => {
-        // Yay! Nothing happen, turn off the spinner and send the reference.
-        spinner.stop(true);
-        return this;
-      });
+    // Yay! Nothing happen, turn off the spinner and send the reference.
+    spinner.stop(true);
+    return this;
   }
   /**
    * Run a single test. It will execute the test file using `shelljs` and based on the
