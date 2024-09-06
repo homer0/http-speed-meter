@@ -10,21 +10,19 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Node.js
+        uses: actions/setup-node@v3
         with:
-          # pulls all commits (needed for lerna / semantic release to correctly version)
-          fetch-depth: "0"
-      - name: Read .nvmrc
-        run: echo "::set-output name=NVMRC::$(cat .nvmrc)"
-        id: nvm
-      - uses: actions/setup-node@v1
+          node-version-file: '.nvmrc'
+      - uses: pnpm/action-setup@v2
         with:
-          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          version: 9
       - name: Install dependencies
         env:
           HUSKY_SKIP_INSTALL: 1
-        run: npm ci
-      - run: npm run results
+        run: pnpm install --frozen-lockfile
+      - run: pnpm run results
       - name: Configure Git User
         run: |
           git config --global user.name '@homer0'
