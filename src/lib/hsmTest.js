@@ -47,23 +47,21 @@ class HsmTest {
    *                    them. If anything goes wrong, it will use `console.error`
    *                    to log the error message.
    */
-  run() {
-    return loadESMLibs()
-      .then(() =>
-        Promise.all([this._runTest(this.test), this._runTest(this.testJSON)]).then(
-          ([raw, json]) =>
-            console.log(
-              JSON.stringify({
-                test: this.name,
-                raw,
-                json,
-              }),
-            ),
-        ),
-      )
-      .catch((error) => {
-        console.error(`ERROR: ${error.message}`);
-      });
+  async run() {
+    try {
+      await loadESMLibs();
+      const raw = await this._runTest(this.test);
+      const json = await this._runTest(this.testJSON);
+      console.log(
+        JSON.stringify({
+          test: this.name,
+          raw,
+          json,
+        }),
+      );
+    } catch (error) {
+      console.error(`ERROR: ${error.message}`);
+    }
   }
   /**
    * This is the method that should be extended for the raw/text request test.
