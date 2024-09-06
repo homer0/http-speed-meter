@@ -43,7 +43,7 @@
   },
   "engine-strict": true,
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20 <21"
   },
   "main": "src/index.js",
   "lint-staged": {
