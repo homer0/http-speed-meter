@@ -353,7 +353,8 @@ class HsmTester {
     const lines = [''];
     // Add some title info...
     lines.push(chalk.underline.bold('HTTP Speed Meter - Average Results\n'));
-    lines.push(chalk.dim(`${tab}Target URL: ${this.url}`));
+    const mockIndicator = this.mock ? ' (Mocked)' : '';
+    lines.push(chalk.dim(`${tab}Target URL: ${this.url}${mockIndicator}`));
     lines.push(chalk.dim(`${tab}Iterations: ${this.iterations}\n`));
     /**
      * This will store each result row label by its test name. The reason I first store
