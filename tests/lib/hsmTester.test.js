@@ -327,6 +327,18 @@ describe('HsmTester', () => {
           test: 'got',
         },
       ],
+      fetch: [
+        {
+          json: 1305,
+          raw: 1400,
+          test: 'fetch',
+        },
+        {
+          json: 1390,
+          raw: 1372,
+          test: 'fetch',
+        },
+      ],
     };
 
     const axiosPackage = {
@@ -364,7 +376,7 @@ describe('HsmTester', () => {
     const ref = await sub.run();
     ref.showResults();
     const { mock } = logMock;
-    expect(mock.calls.length).toBe(12);
+    expect(mock.calls.length).toBe(14);
     expect(mock.calls[0][0].trim()).toBe('');
     expect(mock.calls[1][0]).toMatch(/http speed meter/i);
     expect(mock.calls[2][0]).toMatch(RegExp(targetURL, 'i'));
@@ -373,18 +385,20 @@ describe('HsmTester', () => {
     expect(mock.calls[5][0]).toMatch(
       RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
     );
-    expect(mock.calls[6][0]).toMatch(
+    expect(mock.calls[6][0]).toMatch(/fetch@native\W+█+ \d+(?:(\.\d+)?)s/);
+    expect(mock.calls[7][0]).toMatch(
       RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
     );
-    expect(mock.calls[7][0].trim()).toBe('');
-    expect(mock.calls[8][0]).toMatch(/test: text/i);
-    expect(mock.calls[9][0]).toMatch(
+    expect(mock.calls[8][0].trim()).toBe('');
+    expect(mock.calls[9][0]).toMatch(/test: text/i);
+    expect(mock.calls[10][0]).toMatch(
       RegExp(`${axiosPackage.name}@${axiosPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
     );
-    expect(mock.calls[10][0]).toMatch(
+    expect(mock.calls[11][0]).toMatch(/fetch@native\W+█+ \d+(?:(\.\d+)?)s/);
+    expect(mock.calls[12][0]).toMatch(
       RegExp(`${gotPackage.name}@${gotPackage.version}\\W+█+ \\d+(?:(\\.\\d+)?)s`),
     );
-    expect(mock.calls[11][0].trim()).toBe('');
+    expect(mock.calls[13][0].trim()).toBe('');
   });
 
   it('should fail when trying to print the results for an unkwown dependency', async () => {
