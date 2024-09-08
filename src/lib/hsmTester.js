@@ -120,6 +120,15 @@ class HsmTester {
      * @ignore
      */
     this._currentColorsIndex = -1;
+    /**
+     * A list of native modules that form part of the tests. This is to avoid trying to get
+     * a dependency version from the `package.json` when the module used in the test comes
+     * directly from Node.js.
+     *
+     * @type {Array}
+     * @ignore
+     */
+    this._nativeModules = ['fetch'];
   }
   /**
    * Run the tests.
@@ -316,6 +325,14 @@ class HsmTester {
    * @ignore
    */
   _getInfo(depName) {
+    if (this._nativeModules.includes(depName)) {
+      return {
+        name: depName,
+        version: 'native',
+        repository: 'https://nodejs.org',
+      };
+    }
+
     if (!dependencies[depName]) {
       throw new Error(`There's no info about '${depName}' on the package.json`);
     }
