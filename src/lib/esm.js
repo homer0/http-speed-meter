@@ -1,4 +1,4 @@
-module.exports.LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got'];
+module.exports.LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got', 'ky'];
 const libsModules = {};
 
 module.exports.loadESMLibs = () =>
