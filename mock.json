@@ -50,40 +50,6 @@
 			"test": "node-fetch"
 		}
 	],
-	"request": [
-		{
-			"json": 2079,
-			"raw": 2082,
-			"test": "request"
-		},
-		{
-			"json": 2203,
-			"raw": 2209,
-			"test": "request"
-		},
-		{
-			"json": 2092,
-			"raw": 2223,
-			"test": "request"
-		}
-	],
-	"requestpromise": [
-		{
-			"json": 1880,
-			"raw": 2050,
-			"test": "request-promise"
-		},
-		{
-			"json": 2064,
-			"raw": 2061,
-			"test": "request-promise"
-		},
-		{
-			"json": 2089,
-			"raw": 1925,
-			"test": "request-promise"
-		}
-	],
 	"reqwest": [
 		{
 			"json": 2137,
