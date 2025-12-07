@@ -1,4 +1,4 @@
-import gaxios from 'gaxios';
+import { instance as gaxios } from 'gaxios';
 import { HsmTest } from '../index.js';
 
 class AxiosTest extends HsmTest {
