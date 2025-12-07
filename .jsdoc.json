@@ -1,0 +1,27 @@
+{
+  "source": {
+    "include": ["./src"],
+    "includePattern": ".js$"
+  },
+  "plugins": ["docdash/nativeTypesPlugin", "plugins/markdown"],
+  "templates": {
+    "cleverLinks": true,
+    "default": {
+      "includeDate": false
+    }
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docs",
+    "readme": "README.md",
+    "template": "node_modules/docdash"
+  },
+  "docdash": {
+    "title": "http-speed-meter",
+    "meta": {
+      "title": "http-speed-meter docs"
+    },
+    "sectionOrder": [],
+    "collapse": true
+  }
+}
