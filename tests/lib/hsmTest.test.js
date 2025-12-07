@@ -1,35 +1,38 @@
 /* eslint-disable no-console */
-const args = require('../mocks/yargs.mock');
+vi.mock('yargs');
 
-jest.setMock('yargs', args);
-jest.unmock('../../src/lib/hsmTest');
-
-const HsmTest = require('../../src/lib/hsmTest');
-const { loadESMLibs } = require('../../src/lib/esm');
+import { vi, describe, it, beforeEach, expect } from 'vitest';
+import yargsMock from 'yargs';
+import { HsmTest } from '../../src/lib/hsmTest.js';
 
 const originalErrorLog = console.error;
 const originalLog = console.log;
-loadESMLibs.mockResolvedValue({});
 
 describe('HsmTest', () => {
+  const mockArgs = (args) => {
+    yargsMock.mockReturnValue({
+      argv: args,
+    });
+  };
+
   beforeEach(() => {
-    args.reset();
+    vi.clearAllMocks();
     console.error = originalErrorLog;
     console.log = originalLog;
-    loadESMLibs.mockClear();
   });
 
   it('should thrown an error if no URL was send as an argument', () => {
+    mockArgs({});
     expect(() => new HsmTest()).toThrow('No URL was specified');
   });
 
   it("should thrown an error if the 'test' method is not overwritten", () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
 
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     return new HsmTest().run().then(() => {
       expect(errorLogMock.mock.calls.length).toBe(1);
@@ -38,12 +41,12 @@ describe('HsmTest', () => {
   });
 
   it("should thrown an error if the 'testJSON' method is not overwritten", () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
 
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -59,11 +62,11 @@ describe('HsmTest', () => {
   });
 
   it('should be able to run both test methods', () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
-    const logMock = jest.fn();
-    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const logMock = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(logMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -88,7 +91,7 @@ describe('HsmTest', () => {
   });
 
   it('should return a custom user agent with the test name', () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
 
@@ -105,11 +108,11 @@ describe('HsmTest', () => {
   });
 
   it('should calculate the timing for each test', () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
-    const logMock = jest.fn();
-    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const logMock = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(logMock);
 
     let initialTestTime = 0;
     let finalTestTime = 0;
@@ -147,11 +150,11 @@ describe('HsmTest', () => {
   });
 
   it('should thrown an error if a test finish callback is called before the start callback', () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -173,12 +176,12 @@ describe('HsmTest', () => {
   });
 
   it('should allow the test methods to reject the test if something goes wrong', () => {
-    args.setValues({
+    mockArgs({
       url: 'http://homer0.com',
     });
     const errorMessage = 'Something went wrong';
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish, reject) {

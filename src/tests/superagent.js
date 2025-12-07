@@ -1,5 +1,5 @@
-const superagent = require('superagent');
-const { HsmTest } = require('..');
+import superagent from 'superagent';
+import { HsmTest } from '../index.js';
 
 class SuperAgentTest extends HsmTest {
   test(start, finish, reject) {

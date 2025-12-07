@@ -1,9 +1,9 @@
-const { HsmTest, getLib } = require('..');
+import ky from 'ky';
+import { HsmTest } from '../index.js';
 
 class KyTest extends HsmTest {
   test(start, finish, reject) {
     start();
-    const ky = getLib('ky').default;
     ky.get(this.url, {
       headers: {
         'User-Agent': this.userAgent,
@@ -16,7 +16,6 @@ class KyTest extends HsmTest {
 
   testJSON(start, finish, reject) {
     start();
-    const ky = getLib('ky').default;
     ky.get(this.url, {
       headers: {
         'User-Agent': this.userAgent,

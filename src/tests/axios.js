@@ -1,5 +1,5 @@
-const axios = require('axios');
-const { HsmTest } = require('..');
+import axios from 'axios';
+import { HsmTest } from '../index.js';
 
 class AxiosTest extends HsmTest {
   test(start, finish, reject) {

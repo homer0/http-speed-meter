@@ -1,5 +1,5 @@
-const { request } = require('undici');
-const { HsmTest } = require('..');
+import { request } from 'undici';
+import { HsmTest } from '../index.js';
 
 class UndiciTest extends HsmTest {
   test(start, finish, reject) {

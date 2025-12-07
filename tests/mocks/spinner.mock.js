@@ -1,8 +1,10 @@
+import { vi } from 'vitest';
+
 class SpinnerMockManager {
   constructor() {
-    this.new = jest.fn();
-    this.start = jest.fn();
-    this.stop = jest.fn();
+    this.new = vi.fn();
+    this.start = vi.fn();
+    this.stop = vi.fn();
   }
 
   reset() {
@@ -24,4 +26,4 @@ class SpinnerMock {
 
 manager.Spinner = SpinnerMock;
 
-module.exports = manager;
+export default manager;

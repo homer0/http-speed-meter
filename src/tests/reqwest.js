@@ -1,5 +1,5 @@
-const reqwest = require('reqwest');
-const { HsmTest } = require('..');
+import reqwest from 'reqwest';
+import { HsmTest } from '../index.js';
 
 class ReqwestTest extends HsmTest {
   test(start, finish, reject) {

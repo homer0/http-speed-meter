@@ -1,11 +1,12 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-const path = require('path');
-const fs = require('fs');
-const shell = require('shelljs');
-const { Spinner } = require('cli-spinner');
-const { dependencies } = require('../../package.json');
-const { getLib } = require('./esm');
+import path from 'node:path';
+import fs from 'node:fs';
+import shell from 'shelljs';
+import { Spinner } from 'cli-spinner';
+import prettyMs from 'pretty-ms';
+import chalk from 'chalk';
+import packageJson from '../../package.json' with { type: 'json' };
+
+const { dependencies } = packageJson;
 
 const DEFAULT_MAX_COLUMN = 80;
 /**
@@ -16,7 +17,7 @@ const DEFAULT_MAX_COLUMN = 80;
  * @class
  * @author Homer0.
  */
-class HsmTester {
+export class HsmTester {
   /**
    * Class constructor.
    *
@@ -181,6 +182,7 @@ class HsmTester {
             highest = prop;
           } else if (typeof prop !== 'number') {
             // If the property is not a Number, it's probably the name, delete it.
+            // eslint-disable-next-line no-param-reassign
             delete iteration[propName];
           }
         });
@@ -288,7 +290,6 @@ class HsmTester {
     const total = 100;
     const percentage = Math.floor((value * total) / highest);
     const width = Math.floor((this.maxColumns / total) * percentage);
-    const prettyMs = getLib('pretty-ms').default;
     return {
       width,
       title: this.normalizedNames[name],
@@ -363,7 +364,6 @@ class HsmTester {
    * @ignore
    */
   _output(results) {
-    const chalk = getLib('chalk').default;
     // Let's sort the tests name.
     const testNames = Object.keys(results).sort();
     // Because `\t` takes too much space :P.
@@ -464,7 +464,6 @@ class HsmTester {
       );
     }
 
-    const chalk = getLib('chalk').default;
     // Turn on the spinner.
     const spinner = new Spinner({
       text: 'Making the requests %s',
@@ -554,7 +553,3 @@ class HsmTester {
     return result;
   }
 }
-/**
- * @ignore
- */
-module.exports = HsmTester;

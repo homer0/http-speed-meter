@@ -91,4 +91,4 @@ First of all, install all the dependencies (if you haven't done it yet), then:
 - **If you want to add a new test:** Create a new file on `/src/tests` and follow the example of the other tests: The `test` and `testJSON` methods, the name getter and `.run()` your file at the end of the file. Don't forget to add the dependency on the `package.json`!.
 - **If you want to modify the output/reporter:** There's an script called `mock`, good to the `package.json` and take a look. It starts the process but with mocked results, so you don't have to make real requests while changing rainbow of output you are writing.
 
-Finally, and I didn't mentioned earlier because the hooks are there for a reason, you have the `pnpm run lint` and `pnpm test` for the linting and the unit tests.
+Finally, and I didn't mention earlier because the hooks are there for a reason, you have the `pnpm run lint:all` and `pnpm test` for the linting and the unit tests.

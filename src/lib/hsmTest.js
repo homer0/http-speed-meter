@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-const { argv } = require('yargs');
-const { loadESMLibs } = require('./esm');
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
-// eslint-disable-next-line no-process-env
+// eslint-disable-next-line n/no-process-env
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 /**
  * This is the class all the tests extend. It takes care of receiving the URL from the CLI
@@ -12,7 +12,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
  * @class
  * @author Homer0.
  */
-class HsmTest {
+export class HsmTest {
   /**
    * Class constructor.
    *
@@ -20,6 +20,8 @@ class HsmTest {
    * @throws {Error} If no URL was sent on the CLI arguments.
    */
   constructor() {
+    const { argv } = yargs(hideBin(process.argv));
+
     /**
      * The target URL the test should make the requests to.
      *
@@ -49,7 +51,6 @@ class HsmTest {
    */
   async run() {
     try {
-      await loadESMLibs();
       const raw = await this._runTest(this.test);
       const json = await this._runTest(this.testJSON);
       console.log(
@@ -150,7 +151,3 @@ class HsmTest {
     });
   }
 }
-/**
- * @ignore
- */
-module.exports = HsmTest;
