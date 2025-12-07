@@ -1,7 +1,7 @@
-const yargs = require('yargs/yargs');
-const { hideBin } = require('yargs/helpers');
-const { loadESMLibs } = require('./lib/esm');
-const { HsmTester } = require('.');
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
+import { loadESMLibs } from './lib/esm.js';
+import { HsmTester } from './index.js';
 
 const cleanArgv = process.argv.filter((arg) => arg !== '--');
 const { argv } = yargs(hideBin(cleanArgv));

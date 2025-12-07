@@ -1,11 +1,9 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-const path = require('path');
-const fs = require('fs');
-const shell = require('shelljs');
-const { Spinner } = require('cli-spinner');
-const { dependencies } = require('../../package.json');
-const { getLib } = require('./esm');
+import path from 'node:path';
+import fs from 'node:fs';
+import shell from 'shelljs';
+import { Spinner } from 'cli-spinner';
+import { dependencies } from '../../package.json' with { type: 'json' };
+import { getLib } from './esm.js';
 
 const DEFAULT_MAX_COLUMN = 80;
 /**
@@ -16,7 +14,7 @@ const DEFAULT_MAX_COLUMN = 80;
  * @class
  * @author Homer0.
  */
-class HsmTester {
+export class HsmTester {
   /**
    * Class constructor.
    *
@@ -181,6 +179,7 @@ class HsmTester {
             highest = prop;
           } else if (typeof prop !== 'number') {
             // If the property is not a Number, it's probably the name, delete it.
+            // eslint-disable-next-line no-param-reassign
             delete iteration[propName];
           }
         });
@@ -554,7 +553,3 @@ class HsmTester {
     return result;
   }
 }
-/**
- * @ignore
- */
-module.exports = HsmTester;

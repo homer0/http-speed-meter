@@ -1,11 +1,12 @@
-module.exports.LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got', 'ky'];
+/* eslint-disable jsdoc/require-jsdoc */
+export const LIBS = ['pretty-ms', 'chalk', 'node-fetch', 'got', 'ky'];
 const libsModules = {};
 
-module.exports.loadESMLibs = () =>
+export const loadESMLibs = () =>
   Promise.all(
-    module.exports.LIBS.map(async (lib) => {
+    LIBS.map(async (lib) => {
       libsModules[lib] = await import(lib);
     }),
   );
 
-module.exports.getLib = (lib) => libsModules[lib];
+export const getLib = (lib) => libsModules[lib];

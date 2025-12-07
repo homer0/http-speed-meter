@@ -1,4 +1,4 @@
-const { HsmTest, getLib } = require('..');
+import { HsmTest, getLib } from '../index.js';
 
 class NodeFetchTest extends HsmTest {
   test(start, finish, reject) {

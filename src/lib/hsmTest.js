@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-const { argv } = require('yargs');
-const { loadESMLibs } = require('./esm');
+import { argv } from 'yargs';
+import { loadESMLibs } from './esm.js';
 
-// eslint-disable-next-line no-process-env
+// eslint-disable-next-line n/no-process-env
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 /**
  * This is the class all the tests extend. It takes care of receiving the URL from the CLI
@@ -12,7 +12,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
  * @class
  * @author Homer0.
  */
-class HsmTest {
+export class HsmTest {
   /**
    * Class constructor.
    *
@@ -150,7 +150,3 @@ class HsmTest {
     });
   }
 }
-/**
- * @ignore
- */
-module.exports = HsmTest;
