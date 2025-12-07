@@ -9,8 +9,9 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'istanbul',
-      reportsDirectory: resolve('./coverage-unit'),
+      reportsDirectory: resolve('./coverage'),
       reporter: ['text', 'lcov'],
+      exclude: ['tests/mocks/**'],
     },
   },
 });
