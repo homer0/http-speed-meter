@@ -9,57 +9,41 @@ vi.mock('cli-spinner', async () => {
     Spinner: spinnerMock.default.Spinner,
   };
 });
-vi.mock('../../src/lib/esm.js');
+vi.mock('chalk', () => ({
+  default: {
+    underline: {
+      bold: vi.fn((str) => str),
+    },
+    dim: vi.fn((str) => str),
+    red: vi.fn((str) => str),
+    green: vi.fn((str) => str),
+    yellow: vi.fn((str) => str),
+    blue: vi.fn((str) => str),
+    magenta: vi.fn((str) => str),
+    cyan: vi.fn((str) => str),
+    white: vi.fn((str) => str),
+    black: vi.fn((str) => str),
+  },
+}));
+vi.mock('pretty-ms', () => ({
+  default: vi.fn((ms) => `${ms}s`),
+}));
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'node:fs';
 import shell from '../mocks/shell.mock.js';
 import spinner from '../mocks/spinner.mock.js';
 import { HsmTester } from '../../src/lib/hsmTester.js';
-import { getLib } from '../../src/lib/esm.js';
 
 const originalLog = console.log;
-const chalkMock = {
-  underline: {
-    bold: vi.fn((str) => str),
-  },
-  dim: vi.fn((str) => str),
-  red: vi.fn((str) => str),
-  green: vi.fn((str) => str),
-  yellow: vi.fn((str) => str),
-  blue: vi.fn((str) => str),
-  magenta: vi.fn((str) => str),
-  cyan: vi.fn((str) => str),
-  white: vi.fn((str) => str),
-  black: vi.fn((str) => str),
-};
-const prettyMsMock = vi.fn((ms) => `${ms}s`);
-const esmLibs = {
-  chalk: chalkMock,
-  'pretty-ms': prettyMsMock,
-};
-
-getLib.mockImplementation((lib) => ({
-  default: esmLibs[lib],
-}));
 
 describe('HsmTester', () => {
   beforeEach(() => {
+    vi.resetAllMocks();
     fs.readdirSync.mockReset();
     fs.readFileSync.mockReset();
     shell.reset();
     spinner.reset();
-    chalkMock.dim.mockClear();
-    chalkMock.red.mockClear();
-    chalkMock.green.mockClear();
-    chalkMock.yellow.mockClear();
-    chalkMock.blue.mockClear();
-    chalkMock.magenta.mockClear();
-    chalkMock.cyan.mockClear();
-    chalkMock.white.mockClear();
-    chalkMock.black.mockClear();
-    chalkMock.underline.bold.mockClear();
-    prettyMsMock.mockClear();
     console.log = originalLog;
   });
 

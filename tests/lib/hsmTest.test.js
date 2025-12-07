@@ -1,15 +1,12 @@
 /* eslint-disable no-console */
 vi.mock('yargs');
-vi.mock('../../src/lib/esm.js');
 
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import yargsMock from 'yargs';
 import { HsmTest } from '../../src/lib/hsmTest.js';
-import { loadESMLibs } from '../../src/lib/esm.js';
 
 const originalErrorLog = console.error;
 const originalLog = console.log;
-loadESMLibs.mockResolvedValue({});
 
 describe('HsmTest', () => {
   const mockArgs = (args) => {
@@ -22,7 +19,6 @@ describe('HsmTest', () => {
     vi.clearAllMocks();
     console.error = originalErrorLog;
     console.log = originalLog;
-    loadESMLibs.mockClear();
   });
 
   it('should thrown an error if no URL was send as an argument', () => {
