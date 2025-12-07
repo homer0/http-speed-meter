@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { argv } from 'yargs';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 import { loadESMLibs } from './esm.js';
 
 // eslint-disable-next-line n/no-process-env
@@ -20,6 +21,8 @@ export class HsmTest {
    * @throws {Error} If no URL was sent on the CLI arguments.
    */
   constructor() {
+    const { argv } = yargs(hideBin(process.argv));
+
     /**
      * The target URL the test should make the requests to.
      *
