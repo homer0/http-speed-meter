@@ -2,8 +2,10 @@ import path from 'node:path';
 import fs from 'node:fs';
 import shell from 'shelljs';
 import { Spinner } from 'cli-spinner';
-import { dependencies } from '../../package.json' with { type: 'json' };
+import packageJson from '../../package.json' with { type: 'json' };
 import { getLib } from './esm.js';
+
+const { dependencies } = packageJson;
 
 const DEFAULT_MAX_COLUMN = 80;
 /**
