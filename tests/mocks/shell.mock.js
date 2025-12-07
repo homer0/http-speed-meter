@@ -37,4 +37,4 @@ class ShellJSMock {
   }
 }
 
-module.exports = new ShellJSMock();
+export default new ShellJSMock();

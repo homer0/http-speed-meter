@@ -1,11 +1,18 @@
 /* eslint-disable no-console */
-const args = require('../mocks/yargs.mock');
+vi.mock('yargs', async () => {
+  const viYargs = await vi.importActual('yargs');
+  const yargsMock = await vi.importActual('../mocks/yargs.mock.js');
+  return {
+    ...viYargs,
+    argv: yargsMock.default.argv,
+  };
+});
+vi.mock('../../src/lib/esm.js');
 
-jest.setMock('yargs', args);
-jest.unmock('../../src/lib/hsmTest');
-
-const HsmTest = require('../../src/lib/hsmTest');
-const { loadESMLibs } = require('../../src/lib/esm');
+import { vi, describe, it, beforeEach, expect } from 'vitest';
+import { HsmTest } from '../../src/lib/hsmTest.js';
+import { loadESMLibs } from '../../src/lib/esm.js';
+import args from '../mocks/yargs.mock.js';
 
 const originalErrorLog = console.error;
 const originalLog = console.log;
@@ -28,8 +35,8 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
 
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     return new HsmTest().run().then(() => {
       expect(errorLogMock.mock.calls.length).toBe(1);
@@ -42,8 +49,8 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
 
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -62,8 +69,8 @@ describe('HsmTest', () => {
     args.setValues({
       url: 'http://homer0.com',
     });
-    const logMock = jest.fn();
-    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const logMock = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(logMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -108,8 +115,8 @@ describe('HsmTest', () => {
     args.setValues({
       url: 'http://homer0.com',
     });
-    const logMock = jest.fn();
-    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const logMock = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(logMock);
 
     let initialTestTime = 0;
     let finalTestTime = 0;
@@ -150,8 +157,8 @@ describe('HsmTest', () => {
     args.setValues({
       url: 'http://homer0.com',
     });
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish) {
@@ -177,8 +184,8 @@ describe('HsmTest', () => {
       url: 'http://homer0.com',
     });
     const errorMessage = 'Something went wrong';
-    const errorLogMock = jest.fn();
-    jest.spyOn(console, 'error').mockImplementation(errorLogMock);
+    const errorLogMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation(errorLogMock);
 
     class SubHsmTest extends HsmTest {
       test(start, finish, reject) {

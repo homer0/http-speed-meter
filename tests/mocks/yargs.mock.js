@@ -16,4 +16,4 @@ class YargsMock {
   }
 }
 
-module.exports = new YargsMock();
+export default new YargsMock();

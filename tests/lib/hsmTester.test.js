@@ -1,33 +1,39 @@
 /* eslint-disable no-console */
-jest.mock('fs');
-jest.unmock('../../src/lib/hsmTester');
+vi.mock('node:fs');
+vi.mock('shelljs', () => vi.importActual('../mocks/shell.mock.js'));
+vi.mock('cli-spinner', async () => {
+  const cliSpinner = await vi.importActual('cli-spinner');
+  const spinnerMock = await vi.importActual('../mocks/spinner.mock.js');
+  return {
+    ...cliSpinner,
+    Spinner: spinnerMock.default.Spinner,
+  };
+});
+vi.mock('../../src/lib/esm.js');
 
-const fs = require('fs');
-const shell = require('../mocks/shell.mock');
-const spinner = require('../mocks/spinner.mock');
-
-jest.setMock('shelljs', shell);
-jest.setMock('cli-spinner', spinner);
-
-const HsmTester = require('../../src/lib/hsmTester');
-const { getLib } = require('../../src/lib/esm');
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import fs from 'node:fs';
+import shell from '../mocks/shell.mock.js';
+import spinner from '../mocks/spinner.mock.js';
+import { HsmTester } from '../../src/lib/hsmTester.js';
+import { getLib } from '../../src/lib/esm.js';
 
 const originalLog = console.log;
 const chalkMock = {
   underline: {
-    bold: jest.fn((str) => str),
+    bold: vi.fn((str) => str),
   },
-  dim: jest.fn((str) => str),
-  red: jest.fn((str) => str),
-  green: jest.fn((str) => str),
-  yellow: jest.fn((str) => str),
-  blue: jest.fn((str) => str),
-  magenta: jest.fn((str) => str),
-  cyan: jest.fn((str) => str),
-  white: jest.fn((str) => str),
-  black: jest.fn((str) => str),
+  dim: vi.fn((str) => str),
+  red: vi.fn((str) => str),
+  green: vi.fn((str) => str),
+  yellow: vi.fn((str) => str),
+  blue: vi.fn((str) => str),
+  magenta: vi.fn((str) => str),
+  cyan: vi.fn((str) => str),
+  white: vi.fn((str) => str),
+  black: vi.fn((str) => str),
 };
-const prettyMsMock = jest.fn((ms) => `${ms}s`);
+const prettyMsMock = vi.fn((ms) => `${ms}s`);
 const esmLibs = {
   chalk: chalkMock,
   'pretty-ms': prettyMsMock,
@@ -58,7 +64,7 @@ describe('HsmTester', () => {
   });
 
   it('should be instantiated with all the default options', () => {
-    fs.readdirSync = jest.fn(() => []);
+    fs.readdirSync = vi.fn(() => []);
     const sub = new HsmTester('http://homer0.com', './');
     expect(sub.iterations).toBe(1);
     expect(sub.mock).toBeNull();
@@ -79,7 +85,7 @@ describe('HsmTester', () => {
   });
 
   it('should be able to overwrite all the options (except mocks)', () => {
-    fs.readdirSync = jest.fn(() => []);
+    fs.readdirSync = vi.fn(() => []);
     const customOptions = {
       iterations: 25092015,
       maxColumns: 12,
@@ -108,9 +114,9 @@ describe('HsmTester', () => {
       ],
     };
 
-    fs.readdirSync = jest.fn(() => []);
-    fs.readdirSync = jest.fn(() => ['mockFile.json']);
-    fs.readFileSync = jest.fn(() => JSON.stringify(customMock));
+    fs.readdirSync = vi.fn(() => []);
+    fs.readdirSync = vi.fn(() => ['mockFile.json']);
+    fs.readFileSync = vi.fn(() => JSON.stringify(customMock));
     const sub = new HsmTester('http://homer0.com', './', {
       mock: 'yes-please',
     });
@@ -120,9 +126,9 @@ describe('HsmTester', () => {
   });
 
   it('should fail while reading a mock and throw an exception', () => {
-    fs.readdirSync = jest.fn(() => []);
-    fs.readdirSync = jest.fn(() => ['mockFile.json']);
-    fs.readFileSync = jest.fn(() => 'invalid-json');
+    fs.readdirSync = vi.fn(() => []);
+    fs.readdirSync = vi.fn(() => ['mockFile.json']);
+    fs.readFileSync = vi.fn(() => 'invalid-json');
     expect(
       () =>
         new HsmTester('http://homer0.com', './', {
@@ -132,7 +138,7 @@ describe('HsmTester', () => {
   });
 
   it('should be able to find all the tests on a directory', () => {
-    fs.readdirSync = jest.fn(() => ['myTest.js', '.DS_Store']);
+    fs.readdirSync = vi.fn(() => ['myTest.js', '.DS_Store']);
     const sub = new HsmTester('http://homer0.com', './tests-folder');
     expect(typeof sub.tests.mytest).toBe('string');
     expect(sub.tests.mytest).toMatch(/tests\-folder\/myTest\.js$/i);
@@ -148,15 +154,15 @@ describe('HsmTester', () => {
     };
 
     const spinnerContext = {
-      clearLine: jest.fn(),
+      clearLine: vi.fn(),
       stream: {
-        write: jest.fn(),
+        write: vi.fn(),
       },
     };
 
     const spinnerText = 'loading!';
 
-    fs.readdirSync = jest.fn(() => [testFile]);
+    fs.readdirSync = vi.fn(() => [testFile]);
     shell.addExecCallback(0, JSON.stringify(testResponse));
 
     const sub = new HsmTester(targetURL, testsPath);
@@ -184,7 +190,7 @@ describe('HsmTester', () => {
       message: 'success!',
     };
 
-    fs.readdirSync = jest.fn(() => [testFile]);
+    fs.readdirSync = vi.fn(() => [testFile]);
     shell.addExecCallback(0, JSON.stringify(testResponse));
 
     const sub = new HsmTester(targetURL, testsPath);
@@ -207,7 +213,7 @@ describe('HsmTester', () => {
 
     const testJSONResponse = JSON.stringify(testResponse);
 
-    fs.readdirSync = jest.fn(() => testFiles);
+    fs.readdirSync = vi.fn(() => testFiles);
     shell.addExecCallback([
       {
         code: 0,
@@ -244,7 +250,7 @@ describe('HsmTester', () => {
       },
     ];
 
-    fs.readdirSync = jest.fn(() => [testFile]);
+    fs.readdirSync = vi.fn(() => [testFile]);
     shell.addExecCallback([
       {
         code: 0,
@@ -275,7 +281,7 @@ describe('HsmTester', () => {
     const testFile = 'charito.js';
     const errorReponse = 'Something failed because of the magic of the universe';
 
-    fs.readdirSync = jest.fn(() => [testFile]);
+    fs.readdirSync = vi.fn(() => [testFile]);
     shell.addExecCallback(10, '', errorReponse);
 
     const sub = new HsmTester(targetURL, testsPath);
@@ -290,7 +296,7 @@ describe('HsmTester', () => {
     const testsPath = 'test-folder/more-tests';
     const testFile = 'charito.js';
 
-    fs.readdirSync = jest.fn(() => [testFile]);
+    fs.readdirSync = vi.fn(() => [testFile]);
     shell.addExecCallback(0, 'charito :D!');
 
     const sub = new HsmTester(targetURL, testsPath);
@@ -360,15 +366,15 @@ describe('HsmTester', () => {
 
     let currentReadIndex = -1;
 
-    fs.readdirSync = jest.fn(() => []);
-    fs.readdirSync = jest.fn(() => ['mockFile.json']);
-    fs.readFileSync = jest.fn(() => {
+    fs.readdirSync = vi.fn(() => []);
+    fs.readdirSync = vi.fn(() => ['mockFile.json']);
+    fs.readFileSync = vi.fn(() => {
       currentReadIndex++;
       return JSON.stringify(readReponse[currentReadIndex]);
     });
 
-    const logMock = jest.fn();
-    jest.spyOn(console, 'log').mockImplementation(logMock);
+    const logMock = vi.fn();
+    vi.spyOn(console, 'log').mockImplementation(logMock);
     const sub = new HsmTester(targetURL, './', {
       mock: 'yes-please',
       colors: ['black'],
@@ -418,9 +424,9 @@ describe('HsmTester', () => {
       ],
     };
 
-    fs.readdirSync = jest.fn(() => []);
-    fs.readdirSync = jest.fn(() => ['mockFile.json']);
-    fs.readFileSync = jest.fn(() => JSON.stringify(customMock));
+    fs.readdirSync = vi.fn(() => []);
+    fs.readdirSync = vi.fn(() => ['mockFile.json']);
+    fs.readFileSync = vi.fn(() => JSON.stringify(customMock));
 
     const sub = new HsmTester('batman.com', './', {
       mock: 'yes-please',
