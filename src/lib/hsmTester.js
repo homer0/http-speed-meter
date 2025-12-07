@@ -2,8 +2,9 @@ import path from 'node:path';
 import fs from 'node:fs';
 import shell from 'shelljs';
 import { Spinner } from 'cli-spinner';
+import prettyMs from 'pretty-ms';
+import chalk from 'chalk';
 import packageJson from '../../package.json' with { type: 'json' };
-import { getLib } from './esm.js';
 
 const { dependencies } = packageJson;
 
@@ -289,7 +290,6 @@ export class HsmTester {
     const total = 100;
     const percentage = Math.floor((value * total) / highest);
     const width = Math.floor((this.maxColumns / total) * percentage);
-    const prettyMs = getLib('pretty-ms').default;
     return {
       width,
       title: this.normalizedNames[name],
@@ -364,7 +364,6 @@ export class HsmTester {
    * @ignore
    */
   _output(results) {
-    const chalk = getLib('chalk').default;
     // Let's sort the tests name.
     const testNames = Object.keys(results).sort();
     // Because `\t` takes too much space :P.
@@ -465,7 +464,6 @@ export class HsmTester {
       );
     }
 
-    const chalk = getLib('chalk').default;
     // Turn on the spinner.
     const spinner = new Spinner({
       text: 'Making the requests %s',

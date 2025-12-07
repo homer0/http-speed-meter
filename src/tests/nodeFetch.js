@@ -1,9 +1,9 @@
-import { HsmTest, getLib } from '../index.js';
+import fetch from 'node-fetch';
+import { HsmTest } from '../index.js';
 
 class NodeFetchTest extends HsmTest {
   test(start, finish, reject) {
     start();
-    const fetch = getLib('node-fetch').default;
     fetch(this.url, {
       headers: {
         'User-Agent': this.userAgent,
@@ -16,7 +16,6 @@ class NodeFetchTest extends HsmTest {
 
   testJSON(start, finish, reject) {
     start();
-    const fetch = getLib('node-fetch').default;
     fetch(this.url, {
       headers: {
         'User-Agent': this.userAgent,

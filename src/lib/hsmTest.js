@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { loadESMLibs } from './esm.js';
 
 // eslint-disable-next-line n/no-process-env
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -52,7 +51,6 @@ export class HsmTest {
    */
   async run() {
     try {
-      await loadESMLibs();
       const raw = await this._runTest(this.test);
       const json = await this._runTest(this.testJSON);
       console.log(
