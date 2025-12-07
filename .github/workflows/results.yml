@@ -10,14 +10,12 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
+          cache: 'pnpm'
       - name: Install dependencies
         env:
           HUSKY_SKIP_INSTALL: 1
@@ -32,7 +30,7 @@ jobs:
           git add RESULTS.md
           git commit -m "publish: update results [skip ci]"
       - name: Push results
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
