@@ -8,26 +8,26 @@ HTTP Speed Meter - Average Results
 
     Test: JSON
 
-    axios@1.13.2        21ms
-    fetch@native        21ms
-    gaxios@7.1.3        19ms
-    got@14.6.5          20ms
-    ky@1.14.0           21ms
-    node-fetch@3.3.2    20ms
-    reqwest@2.0.5       20ms
-    superagent@10.2.3  ██ 45ms
-    undici@7.16.0      ███ 66ms
+    axios@1.13.2       ██ 22ms
+    fetch@native       █ 14ms
+    gaxios@7.1.3       ███ 24ms
+    got@14.6.6         ██ 22ms
+    ky@1.14.2          ███ 24ms
+    node-fetch@3.3.2   █ 13ms
+    reqwest@2.0.5      █ 13ms
+    superagent@10.2.3  █████ 44ms
+    undici@7.16.0      ████████████████████ 149ms
 
 
     Test: Text
 
-    axios@1.13.2       ████████ 135ms
-    fetch@native       █████ 98ms
-    gaxios@7.1.3       █████ 97ms
-    got@14.6.5         ███ 61ms
-    ky@1.14.0          ████ 74ms
-    node-fetch@3.3.2   ████ 67ms
-    reqwest@2.0.5      █████ 99ms
-    superagent@10.2.3  ████ 71ms
-    undici@7.16.0      ████ 86ms
+    axios@1.13.2       ███████████ 81ms
+    fetch@native       ███████████ 80ms
+    gaxios@7.1.3       █████████████ 102ms
+    got@14.6.6         ████████ 67ms
+    ky@1.14.2          ███████████ 82ms
+    node-fetch@3.3.2   ██████ 47ms
+    reqwest@2.0.5      ████████ 65ms
+    superagent@10.2.3  ██████ 51ms
+    undici@7.16.0      █████████████ 101ms
 ```
