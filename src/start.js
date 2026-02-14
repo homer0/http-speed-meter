@@ -4,7 +4,7 @@ import { HsmTester } from './index.js';
 
 const cleanArgv = process.argv.filter((arg) => arg !== '--');
 const { argv } = yargs(hideBin(cleanArgv));
-const defaultURL = 'https://pokeapi.co/api/v2/pokemon/lugia';
+const defaultURL = 'https://pokeapi.co/api/v2/pokemon/mewtwo';
 const targetURL = argv.url || defaultURL;
 
 new HsmTester(targetURL, './src/tests', {
