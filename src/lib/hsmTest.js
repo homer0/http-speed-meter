@@ -45,8 +45,8 @@ export class HsmTest {
    * Run all the test request methods.
    *
    * @returns {Promise} If all the request methods successfully finish, this method will
-   *                    encode the results on JSON and log them so the _"tester_" can read
-   *                    them. If anything goes wrong, it will use `console.error`
+   *                    encode the results on JSON and log them so the _"tester_" can
+   *                    read them. If anything goes wrong, it will use `console.error`
    *                    to log the error message.
    */
   async run() {

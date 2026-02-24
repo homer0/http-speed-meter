@@ -122,9 +122,9 @@ export class HsmTester {
      */
     this._currentColorsIndex = -1;
     /**
-     * A list of native modules that form part of the tests. This is to avoid trying to get
-     * a dependency version from the `package.json` when the module used in the test comes
-     * directly from Node.js.
+     * A list of native modules that form part of the tests. This is to avoid trying to
+     * get a dependency version from the `package.json` when the module used in the test
+     * comes directly from Node.js.
      *
      * @type {Array}
      * @ignore
@@ -497,8 +497,8 @@ export class HsmTester {
    *
    * @param {string} name  The test name. It should exists as a key on the `this.tests`
    *                       dictionary.
-   * @returns {Promise<undefined, Error>} If everything goes well, the result of the test
-   *                                      will automatically be added to the
+   * @returns {Promise<undefined, Error>} If everything goes well, the result of the
+   *                                      test will automatically be added to the
    *                                      `this.results` Object and the Promise will be
    *                                      resolved without any parameter.
    * @ignore
