@@ -26,24 +26,24 @@
     "ky": "^1.14.3",
     "superagent": "10.3.0",
     "reqwest": "2.0.5",
-    "undici": "^7.22.0",
+    "undici": "^7.24.3",
     "xhr2": "0.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.4.3",
-    "@commitlint/config-conventional": "^20.4.3",
+    "@commitlint/cli": "^20.4.4",
+    "@commitlint/config-conventional": "^20.4.4",
     "@homer0/eslint-plugin": "^14.2.3",
     "@homer0/prettier-config": "^2.0.0",
     "@homer0/prettier-plugin-jsdoc": "^11.0.2",
-    "@vitest/coverage-istanbul": "^4.0.18",
+    "@vitest/coverage-istanbul": "^4.1.0",
     "docdash": "homer0/docdash#semver:^2.1.2",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "jsdoc": "^4.0.5",
-    "lint-staged": "^16.3.2",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "engine-strict": true,
   "engines": {
