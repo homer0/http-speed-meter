@@ -11,7 +11,7 @@
     "speed",
     "meter"
   ],
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.1.1",
   "type": "module",
   "dependencies": {
     "chalk": "^5.6.2",
