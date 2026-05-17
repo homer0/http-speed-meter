@@ -1,2 +1,6 @@
+minimumReleaseAge: 7200 # 5 days
+minimumReleaseAgeExclude:
+- '@homer0/*'
+
 allowBuilds:
   unrs-resolver: true
