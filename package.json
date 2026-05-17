@@ -20,7 +20,7 @@
     "pretty-ms": "^9.3.0",
     "cli-spinner": "0.2.10",
     "node-fetch": "^3.3.2",
-    "axios": "^1.16.1",
+    "axios": "^1.16.0",
     "gaxios": "^7.1.4",
     "got": "15.0.5",
     "ky": "^2.0.2",
@@ -30,8 +30,8 @@
     "xhr2": "0.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.0.1",
-    "@commitlint/config-conventional": "^21.0.1",
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
     "@homer0/eslint-plugin": "^14.2.4",
     "@homer0/prettier-config": "^2.0.1",
     "@homer0/prettier-plugin-jsdoc": "^11.1.0",
